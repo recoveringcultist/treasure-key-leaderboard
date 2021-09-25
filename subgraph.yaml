@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,16 +8,14 @@ dataSources:
     source:
       address: "0x1f27f1667c334a157e143e0dc41792353541cdc0"
       abi: CoinFlip
+      startBlock: 9493610
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - BetPlaced
-        - BetRefunded
-        - BetSettled
-        - FlipCoin
-        - OwnershipTransferred
+        - CoinFlipBet
+        - CoinFlipAllTime
       abis:
         - name: CoinFlip
           file: ./abis/CoinFlip.json
@@ -28,8 +26,4 @@ dataSources:
           handler: handleBetRefunded
         - event: BetSettled(indexed uint256,indexed address,indexed bool,uint256,address,bool,uint256)
           handler: handleBetSettled
-        - event: FlipCoin(indexed uint256,bytes32,uint256)
-          handler: handleFlipCoin
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
       file: ./src/mapping.ts

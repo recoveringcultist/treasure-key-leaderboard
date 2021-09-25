@@ -1,6 +1,33 @@
-type ExampleEntity @entity {
+type CoinFlipAllTimeData @entity {
   id: ID!
-  count: BigInt!
-  betId: BigInt! # uint256
-  gambler: Bytes! # address
+  userAddress: Bytes!
+  wins: BigInt!
+  amount: BigInt!
+  token: Bytes!
+}
+
+type CoinFlipDay @entity {
+  id: ID!
+  date: Int!
+  userAddress: Bytes!
+  wins: BigInt!
+  amount: BigInt!
+  token: Bytes!
+}
+
+type CoinFlipBet @entity {
+  id: ID!
+  betId: BigInt!
+  betAmount: BigInt!
+  playerChoice: Boolean!
+  placeBlockNumber: BigInt!
+  placeTimestamp: BigInt!
+  player: Bytes!
+  isSettled: Boolean!
+  token: Bytes!
+  settledBlockNumber: BigInt
+  settledTimestamp: BigInt
+  outcome: Boolean
+  winAmount: BigInt
+  randomNumber: BigInt
 }
