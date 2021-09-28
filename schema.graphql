@@ -6,7 +6,7 @@ type CoinFlipAllTimeData @entity {
   token: Bytes!
 }
 
-type CoinFlipDay @entity {
+type CoinFlipDayData @entity {
   id: ID!
   date: Int!
   userAddress: Bytes!
@@ -28,6 +28,44 @@ type CoinFlipBet @entity {
   settledBlockNumber: BigInt
   settledTimestamp: BigInt
   outcome: Boolean
+  win: Boolean
   winAmount: BigInt
   randomNumber: BigInt
+  txHash: Bytes!
+}
+
+type DiceRollBet @entity {
+  id: ID!
+  betId: BigInt!
+  betAmount: BigInt!
+  playerChoice: BigInt!
+  placeBlockNumber: BigInt!
+  placeTimestamp: BigInt!
+  player: Bytes!
+  isSettled: Boolean!
+  token: Bytes!
+  settledBlockNumber: BigInt
+  settledTimestamp: BigInt
+  outcome: BigInt
+  win: Boolean
+  winAmount: BigInt
+  randomNumber: BigInt
+  txHash: Bytes!
+}
+
+type DiceRollAllTimeData @entity {
+  id: ID!
+  userAddress: Bytes!
+  wins: BigInt!
+  amount: BigInt!
+  token: Bytes!
+}
+
+type DiceRollDayData @entity {
+  id: ID!
+  date: Int!
+  userAddress: Bytes!
+  wins: BigInt!
+  amount: BigInt!
+  token: Bytes!
 }

@@ -15,7 +15,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - CoinFlipBet
-        - CoinFlipAllTime
+        - CoinFlipDayData
+        - CoinFlipAllTimeData
       abis:
         - name: CoinFlip
           file: ./abis/CoinFlip.json
@@ -26,4 +27,29 @@ dataSources:
           handler: handleBetRefunded
         - event: BetSettled(indexed uint256,indexed address,indexed bool,uint256,address,bool,uint256)
           handler: handleBetSettled
-      file: ./src/mapping.ts
+      file: ./src/mapping_coinflip.ts
+  - kind: ethereum/contract
+    name: DiceRoll
+    network: bsc
+    source:
+      address: "0x1f27f1667c334a157e143e0dc41792353541cdc0"
+      abi: DiceRoll
+      startBlock: 9653821
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - CoinFlipBet
+        - CoinFlipAllTime
+      abis:
+        - name: DiceRoll
+          file: ./abis/DiceRoll.json
+      eventHandlers:
+        - event: BetPlaced(indexed uint256,indexed address,indexed uint256,uint256,address)
+          handler: handleBetPlaced
+        - event: BetRefunded(indexed uint256,indexed address)
+          handler: handleBetRefunded
+        - event: BetSettled(indexed uint256,indexed address,indexed uint256,uint256,address,uint256,uint256)
+          handler: handleBetSettled
+      file: ./src/mapping_diceroll.ts
