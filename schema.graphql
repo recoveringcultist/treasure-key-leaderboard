@@ -1,15 +1,24 @@
-type CoinFlipAllTimeData @entity {
+enum GameType {
+  CoinFlip
+  DiceRoll
+  Roulette
+  BarbellRoll
+}
+
+type AllTimeData @entity {
   id: ID!
   userAddress: Bytes!
+  game: GameType!
   wins: BigInt!
   amount: BigInt!
   token: Bytes!
 }
 
-type CoinFlipDayData @entity {
+type DayData @entity {
   id: ID!
   date: Int!
   userAddress: Bytes!
+  game: GameType!
   wins: BigInt!
   amount: BigInt!
   token: Bytes!
@@ -53,19 +62,42 @@ type DiceRollBet @entity {
   txHash: Bytes!
 }
 
-type DiceRollAllTimeData @entity {
+type RouletteBet @entity {
   id: ID!
-  userAddress: Bytes!
-  wins: BigInt!
-  amount: BigInt!
+  betId: BigInt!
+  betAmount: BigInt!
+  betType: Int!
+  playerChoice: Int!
+  placeBlockNumber: BigInt!
+  placeTimestamp: BigInt!
+  player: Bytes!
+  isSettled: Boolean!
   token: Bytes!
+  settledBlockNumber: BigInt
+  settledTimestamp: BigInt
+  outcome: BigInt
+  win: Boolean
+  winAmount: BigInt
+  randomNumber: BigInt
+  txHash: Bytes!
 }
 
-type DiceRollDayData @entity {
+type BarbellRollBet @entity {
   id: ID!
-  date: Int!
-  userAddress: Bytes!
-  wins: BigInt!
-  amount: BigInt!
+  betId: BigInt!
+  betAmount: BigInt!
+  low: BigInt!
+  high: BigInt!
+  placeBlockNumber: BigInt!
+  placeTimestamp: BigInt!
+  player: Bytes!
+  isSettled: Boolean!
   token: Bytes!
+  settledBlockNumber: BigInt
+  settledTimestamp: BigInt
+  outcome: BigInt
+  win: Boolean
+  winAmount: BigInt
+  randomNumber: BigInt
+  txHash: Bytes!
 }

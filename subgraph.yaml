@@ -15,8 +15,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - CoinFlipBet
-        - CoinFlipDayData
-        - CoinFlipAllTimeData
+        - DayData
+        - AllTimeData
       abis:
         - name: CoinFlip
           file: ./abis/CoinFlip.json
@@ -32,7 +32,7 @@ dataSources:
     name: DiceRoll
     network: bsc
     source:
-      address: "0x1f27f1667c334a157e143e0dc41792353541cdc0"
+      address: "0x304c2a05454adcbdb3431c1a8a5fd5c62cbc9e02"
       abi: DiceRoll
       startBlock: 9653821
     mapping:
@@ -40,8 +40,9 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - CoinFlipBet
-        - CoinFlipAllTime
+        - DiceRollBet
+        - DayData
+        - AllTimeData
       abis:
         - name: DiceRoll
           file: ./abis/DiceRoll.json
@@ -53,3 +54,55 @@ dataSources:
         - event: BetSettled(indexed uint256,indexed address,indexed uint256,uint256,address,uint256,uint256)
           handler: handleBetSettled
       file: ./src/mapping_diceroll.ts
+  - kind: ethereum/contract
+    name: Roulette
+    network: bsc
+    source:
+      address: "0x77937a0229694ba58c656a3d3d1579fefdfb9f9d"
+      abi: Roulette
+      startBlock: 9435524
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - RouletteBet
+        - DayData
+        - AllTimeData
+      abis:
+        - name: Roulette
+          file: ./abis/Roulette.json
+      eventHandlers:
+        - event: BetPlaced(indexed uint256,indexed address,indexed uint8,uint8,uint256,address)
+          handler: handleBetPlaced
+        - event: BetRefunded(indexed uint256,indexed address)
+          handler: handleBetRefunded
+        - event: BetSettled(indexed uint256,indexed address,indexed uint8,uint256,address,uint8,uint256,uint256)
+          handler: handleBetSettled
+      file: ./src/mapping_roulette.ts
+  - kind: ethereum/contract
+    name: BarbellRoll
+    network: bsc
+    source:
+      address: "0x4e6f5402d72903dc2d96b2f5e75ef909359aefe5"
+      abi: BarbellRoll
+      startBlock: 9569186
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - BarbellRollBet
+        - DayData
+        - AllTimeData
+      abis:
+        - name: BarbellRoll
+          file: ./abis/BarbellRoll.json
+      eventHandlers:
+        - event: BetPlaced(indexed uint256,indexed address,uint256,uint256,uint256,address)
+          handler: handleBetPlaced
+        - event: BetRefunded(indexed uint256,indexed address)
+          handler: handleBetRefunded
+        - event: BetSettled(indexed uint256,indexed address,uint256,uint256,uint256,address,uint256,uint256)
+          handler: handleBetSettled
+      file: ./src/mapping_barbellroll.ts

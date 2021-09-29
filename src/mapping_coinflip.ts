@@ -7,12 +7,9 @@ import {
   FlipCoin,
   OwnershipTransferred,
 } from "../generated/CoinFlip/CoinFlip";
-import {
-  CoinFlipAllTimeData,
-  CoinFlipBet,
-  CoinFlipDayData,
-} from "../generated/schema";
+import { CoinFlipBet } from "../generated/schema";
 import { log } from "@graphprotocol/graph-ts";
+import { updateLeaderboardData } from "./highscores";
 
 export function handleBetPlaced(event: BetPlaced): void {
   log.info("coinflip handleBetPlaced: {}", [event.params.betId.toString()]);
@@ -58,55 +55,64 @@ export function handleBetSettled(event: BetSettled): void {
   // save the bet
   bet.save();
 
+  // update high scores
+  updateLeaderboardData(
+    event,
+    "CoinFlip",
+    event.params.gambler,
+    event.params.token,
+    event.params.winAmount
+  );
+
   // update high scores if it's a win
-  if (event.params.winAmount.gt(BigInt.fromI32(0))) {
-    // update all time high scores
-    let allTimeID = event.params.gambler
-      .toHexString()
-      .concat("-")
-      .concat(event.params.token.toHexString());
+  // if (event.params.winAmount.gt(BigInt.fromI32(0))) {
+  //   // update all time high scores
+  //   let allTimeID = event.params.gambler
+  //     .toHexString()
+  //     .concat("-")
+  //     .concat(event.params.token.toHexString());
 
-    let allTime = CoinFlipAllTimeData.load(allTimeID);
-    if (allTime == null) {
-      allTime = new CoinFlipAllTimeData(allTimeID);
-      allTime.userAddress = event.params.gambler;
-      allTime.token = event.params.token;
-      allTime.wins = BigInt.fromI32(0);
-      allTime.amount = BigInt.fromI32(0);
-    }
+  //   let allTime = CoinFlipAllTimeData.load(allTimeID);
+  //   if (allTime == null) {
+  //     allTime = new CoinFlipAllTimeData(allTimeID);
+  //     allTime.userAddress = event.params.gambler;
+  //     allTime.token = event.params.token;
+  //     allTime.wins = BigInt.fromI32(0);
+  //     allTime.amount = BigInt.fromI32(0);
+  //   }
 
-    allTime.wins = allTime.wins.plus(BigInt.fromI32(1));
-    allTime.amount = allTime.amount.plus(event.params.winAmount);
-    allTime.save();
+  //   allTime.wins = allTime.wins.plus(BigInt.fromI32(1));
+  //   allTime.amount = allTime.amount.plus(event.params.winAmount);
+  //   allTime.save();
 
-    // update daily high scores
-    let timestamp = event.block.timestamp.toI32();
-    let dayID = timestamp / 86400;
-    let dayStartTimestamp = dayID * 86400;
-    let dayHighscoreID = dayID
-      .toString()
-      .concat("-")
-      .concat(
-        event.params.gambler
-          .toHexString()
-          .concat("-")
-          .concat(event.params.token.toHexString())
-      );
+  //   // update daily high scores
+  //   let timestamp = event.block.timestamp.toI32();
+  //   let dayID = timestamp / 86400;
+  //   let dayStartTimestamp = dayID * 86400;
+  //   let dayHighscoreID = dayID
+  //     .toString()
+  //     .concat("-")
+  //     .concat(
+  //       event.params.gambler
+  //         .toHexString()
+  //         .concat("-")
+  //         .concat(event.params.token.toHexString())
+  //     );
 
-    let day = CoinFlipDayData.load(dayHighscoreID);
-    if (day == null) {
-      day = new CoinFlipDayData(dayHighscoreID);
-      day.date = dayStartTimestamp;
-      day.userAddress = event.params.gambler;
-      day.token = event.params.token;
-      day.wins = BigInt.fromI32(0);
-      day.amount = BigInt.fromI32(0);
-    }
+  //   let day = CoinFlipDayData.load(dayHighscoreID);
+  //   if (day == null) {
+  //     day = new CoinFlipDayData(dayHighscoreID);
+  //     day.date = dayStartTimestamp;
+  //     day.userAddress = event.params.gambler;
+  //     day.token = event.params.token;
+  //     day.wins = BigInt.fromI32(0);
+  //     day.amount = BigInt.fromI32(0);
+  //   }
 
-    day.wins = day.wins.plus(BigInt.fromI32(1));
-    day.amount = day.amount.plus(event.params.winAmount);
-    day.save();
-  }
+  //   day.wins = day.wins.plus(BigInt.fromI32(1));
+  //   day.amount = day.amount.plus(event.params.winAmount);
+  //   day.save();
+  // }
 }
 
 export function handleBetRefunded(event: BetRefunded): void {
